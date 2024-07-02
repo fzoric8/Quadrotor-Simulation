@@ -40,3 +40,39 @@ def Helix_waypoints(n,Tmax = 2*np.pi):
     z = t/Tmax*2
 
     return np.stack((x, y, z), axis=-1)
+
+def Linear_waypoints(ps, pg, n):
+    
+    x = np.linspace(ps[0], pg[0], n)
+    y = np.linspace(ps[1], pg[1], n)
+    z = np.linspace(ps[2], pg[2], n)
+
+    return np.stack((x, y, z), axis=-1)
+
+def Parabola_waypoints():
+    # todo: Add parabola waypoints
+    pass
+
+def Third_order_polynomial(): 
+    # TODO: Add method to generate third order polynomial 
+    pass
+
+
+# Generate 2d zig_zag path
+def gen_zigzag(x_start, y_start, n_points, x_d): 
+    pts = [(x_start, y_start)]
+    for i in range(0, n_points):
+        if i > 0:
+            pt_ = (x_start+i*x_d, (-1)**i*y_start)
+            pts.append(pt_)
+    return np.array(pts)
+
+def interp_zigzag(pts, z_val=0.5): 
+    wpts_ = np.array([pts[0, 0], pts[0, 1], z_val])
+    for i, pt in enumerate(pts):
+        if i < len(pts)-1: 
+            pt_start = (pts[i, 0], pts[i, 1], z_val)
+            pt_goal = (pts[i+1, 0], pts[i+1, 1],z_val)
+            new_pts = Linear_waypoints(pt_start, pt_goal, 5)
+            wpts_ = np.vstack((wpts_, new_pts[1:, :]))   
+    return wpts_

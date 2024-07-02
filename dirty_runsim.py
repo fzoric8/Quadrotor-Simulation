@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as Axes3D
 
 from PathPlanning import RRTStar, Map
-from TrajGen import trajGenerator, Helix_waypoints, Circle_waypoints, Linear_waypoints
+from TrajGen import trajGenerator, Helix_waypoints, Circle_waypoints, Linear_waypoints, gen_zigzag, interp_zigzag
 from Quadrotor import QuadSim
 import controller
 np.random.seed(8)
@@ -18,21 +18,23 @@ bounds = np.array([0,100])
 
 #plan a path from start to goal
 start = np.array([0.8,0.2,0.1])
-goal = np.array([0.4,0.4,2])
+goal = np.array([0.4,0.4,2]) 
+goal2 = np.array([0.4,0.6,0.8])
 
 #rrt = RRTStar(start = start, goal = goal,
 #              Map = mapobs, max_iter = 500,
 #              goal_sample_rate = 0.1)
+# RRT is used as a point (path) generator
 
-#waypoints, min_cost = rrt.plan()
-waypoints = Linear_waypoints(start, goal, 5)
-print(waypoints)
+pts = gen_zigzag(start[0], start[1], 10, 0.25)
+pts_= interp_zigzag(pts, z_val=0.5)
 
 #scale the waypoints to real dimensions
 # waypoints = 0.02*waypoints
 
+print(pts_)
 #Generate trajectory through waypoints
-traj = trajGenerator(waypoints, max_vel = 10, gamma = 1e6)
+traj = trajGenerator(pts_, max_vel = 3, gamma = 1e6)
 
 #initialise simulation with given controller and trajectory
 Tmax = traj.TS[-1]
@@ -51,4 +53,9 @@ ax.set_zlim((0,2))
 #mapobs.plotobs(ax, scale = 0.02)
 
 #run simulation
+print("Starting simulation!")
 sim.run(ax)
+
+
+
+
