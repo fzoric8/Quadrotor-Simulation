@@ -9,7 +9,7 @@ kp = np.array([30,30,30]);
 kR = np.array([5,5,5])
 kW = np.array([0.05,0.05,0.1])
 
-# Constants
+# Constants --> used 
 m = params.mass
 g = params.g
 I = params.I
@@ -76,6 +76,8 @@ def run(state, des_state):
 
     #moment
     M = np.array([kR*eR + kW*eW]).T
+
+    #print(U, M)
 
     return U, M
 

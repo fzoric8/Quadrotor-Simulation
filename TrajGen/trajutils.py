@@ -57,7 +57,6 @@ def Third_order_polynomial():
     # TODO: Add method to generate third order polynomial 
     pass
 
-
 # Generate 2d zig_zag path
 def gen_zigzag(x_start, y_start, n_points, x_d): 
     pts = [(x_start, y_start)]
